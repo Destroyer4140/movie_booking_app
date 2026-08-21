@@ -86,6 +86,16 @@
 - Delete the movie -> /mba/api/v1/movies/:id (delete)
 - Update the movie -> /mba/api/v1/movies/:id (put)
 
+
+## DataBase Schema
+- It's a skelton structure that represents the logical view of the entire database.
+- It defines how data is organised and how the relations among them are associated.
+- Inside mongodb there are multiple colletions possible
+ - colletions1, collections2 etc.
+ - For each collections has a there own schema. -> blurprint of documents
+ - Inside each collections there are multiple documents possible.
+
+
 ## Project Dependency Setup
 
 - npm init -> to create project and package.json
