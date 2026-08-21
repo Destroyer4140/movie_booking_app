@@ -1,10 +1,13 @@
 const express = require('express');
-const app = express(); //express object
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-
+const app = express(); //express object
 const MovieRoutes = require("./routes/movie.routes");
+
+// Configuring body parser
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
 
 // Load env during startup
 const env = require('dotenv');
@@ -12,8 +15,6 @@ env.config();
 
 const PORT = process.env.PORT
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json());
 
 MovieRoutes(app); //invoking the movie routes.
 
