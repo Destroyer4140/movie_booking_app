@@ -1,9 +1,4 @@
-const badRequestResponse = {
-  success: false,
-  err: "",
-  data: {},
-  message: "Malformed Request | Bad Request."
-}
+const { badRequestResponse } = require('../utils/responsebody');
 
 const validateMovieCreateRequest = async (req, res, next) => {
   // validate the movie name
@@ -47,7 +42,7 @@ const validateMovieCreateRequest = async (req, res, next) => {
     badRequestResponse.err = "The director of the movie is not present in the request"
     return res.status(400).json(badRequestResponse);
   }
-  
+
   next();
 }
 

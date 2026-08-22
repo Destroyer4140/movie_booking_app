@@ -12,7 +12,15 @@ const successResponseBody = {
   success: true
 }
 
+const badRequestResponse = {
+  success: false,
+  err: "",
+  data: {},
+  message: "Malformed Request | Bad Request."
+}
+
 module.exports = {
   successResponseBody,
-  errorResponseBody
+  errorResponseBody,
+  badRequestResponse
 }
