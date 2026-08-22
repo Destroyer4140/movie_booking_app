@@ -24,8 +24,7 @@
 - (2). Other system admins can be registered in the app with root admin approval.
 - (3). Clients can register to the system but will require approval from admins. Clients are theater owner.
 - (4). Customer/User can directly register with application.
-- (5). Login Api will be working on token based authentication.
-  ).
+- (5). Login Api will be working on token based authentication.).
 
 ### Theater
 
@@ -75,7 +74,7 @@
 - Those users who are visting the app but are not registered in the system.
 - Can only do browse movies and halls.
 
-## APIS
+### APIS
 
 ### Movies
 
@@ -86,6 +85,16 @@
 - Delete the movie -> /mba/api/v1/movies/:id (delete)
 - Update the movie -> /mba/api/v1/movies/:id (put)
 
+### Theatre
+- Setup a schema and model for theatre resources.
+- We will decipher our business use case and figure out all the required properties for the schema.
+- We will setup model, service, controller and route file, that will focus on theatre resource.
+- apis (/mdb/api/v1/theatres)
+  - Create a new theatre.
+  - Update an existing theatre.
+  - ability to get all the theatres.
+  - filter the theatre based on property.
+  - delete the theatre as well.
 
 ## DataBase Schema
 - It's a skelton structure that represents the logical view of the entire database.
