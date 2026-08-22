@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const app = express(); //express object
 const MovieRoutes = require("./routes/movie.routes");
+const TheatreRoutes = require('./routes/theatre.routes');
 
 // Configuring body parser
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,6 +18,7 @@ const PORT = process.env.PORT
 
 
 MovieRoutes(app); //invoking the movie routes.
+TheatreRoutes(app);
 
 
 app.get('/home', (req, res) => {
