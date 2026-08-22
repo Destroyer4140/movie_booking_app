@@ -1,20 +1,6 @@
 const Movie = require('../models/movie.model');
 const movieService = require('../services/movies.service');
-
-
-const errorResponseBody = {
-  err: {},
-  data: {},
-  message: "Something went wrong, Failed to fetch the movie",
-  success: false
-}
-
-const successResponseBody = {
-  err: {},
-  data: {},
-  message: "Successfully processed the request.",
-  success: true
-}
+const {successResponseBody, errorResponseBody} = require('../utils/responsebody')
 
 /**
  * Controller function to create a new movie
@@ -24,21 +10,19 @@ const successResponseBody = {
  */
 const createMovie = async (req, res) => {
   try {
-    const movie = await Movie.create(req.body);
-    return res.status(201).json({
-      success: true,
-      error: {},
-      data: movie,
-      message: "Successfully created a new movie."
-    });
+    const response = await movieService.createMovie(req.body);
+    if (response.err) {
+      errorResponseBody.err = response.err;
+      errorResponseBody.message = "Validation failed for few parameters of the request body."
+      return res.status(response.code).json(errorResponseBody);
+    }
+    successResponseBody.data = response
+    successResponseBody.message = "Successfully created a new movie.";
+    return res.status(200).json(successResponseBody);
   } catch (err) {
     console.log(err);
-    return res.status(500).json({
-      success: false,
-      error: err,
-      data: {},
-      message: "Something went wrong."
-    });
+    errorResponseBody.err = err;
+    return res.status(500).json(errorResponseBody);
   }
 }
 
@@ -93,8 +77,28 @@ const getMovie =  async (req, res) => {
   }
 }
 
+const updateMovie = async (req, res) => {
+  try {
+    const response = await movieService.updateMovieById(req?.params?.id, req?.body);
+    if (response.err) {
+      errorResponseBody.err = response.err;
+      errorResponseBody.message = "Updates trying to apply doesn't validate the schema."
+      return res.status(response.code).json(errorResponseBody);
+    }
+    successResponseBody.data = response;
+    successResponseBody.message = "Successfully updated the movies.";
+    return res.status(200).json(successResponseBody);
+  } catch (err) {
+    console.log(err);
+    errorResponseBody.err = err;
+    errorResponseBody.message = "Failed to updated the movies.";
+    return res.status(500).json(errorResponseBody);
+  }
+}
+
 module.exports = {
   createMovie,
   deleteMovie,
-  getMovie
+  getMovie,
+  updateMovie
 }
