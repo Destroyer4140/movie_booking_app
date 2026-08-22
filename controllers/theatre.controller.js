@@ -4,11 +4,16 @@ const { successResponseBody, errorResponseBody } = require('../utils/responsebod
 const createTheatre = async (req, res) => {
   try {
     const response = await theatreService.createTheatre(req.body);
-    console.log(response);
+    if (response.err) {
+      errorResponseBody.err = response.err;
+      errorResponseBody.message = "Failed on schema validation.";
+      return res.status(response.code).json(errorResponseBody);
+    }
+
     successResponseBody.data = response;
     successResponseBody.message = "Successfully created the theatre";
     return res.status(201).json(successResponseBody);
-  } catch (err) {
+  } catch (error) {
     errorResponseBody.err = err;
     errorResponseBody.message = "failed to create the theatre";
     return res.status(500).json(errorResponseBody);

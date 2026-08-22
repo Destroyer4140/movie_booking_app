@@ -4,9 +4,19 @@ const createTheatre = async (data) => {
   try {
     const theatre = await Theatre.create(data);
     return theatre;
-  } catch (err) {
-    console.log(err);
-    throw new err;
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      let err = {};
+      Object.keys(error.errors).forEach((key) => {
+        err[key] = error.errors[key].message;
+      });
+      return {
+        err: err,
+        code: 422
+      }
+    } else {
+      throw new error;
+    }
   }
 }
 
