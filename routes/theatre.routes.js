@@ -46,7 +46,6 @@ const routes = (app) => {
    */
   app.get(
     '/mba/api/v1/theatre',
-    theatreMiddleware.validateUpdateMovieRequest,
     theatreController.getAllTheatres
   );
   

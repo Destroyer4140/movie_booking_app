@@ -95,7 +95,20 @@ const updateTheatre = async (id, data) => {
  */
 const getAllTheTheatres = async (filter) => {
   try {
-    const response = await Theatre.find({});
+    let query = {};
+    if (filter && filter.city) {
+      // this checks whether city is present in query params or not.
+      query.city = filter.city;
+    }
+    if (filter && filter.pincode) {
+      // this checks whether pincode is present in query params or not.
+      query.pincode = filter.pincode;
+    }
+    if (filter && filter.name) {
+      // this checks whether name is present in query params or not.
+      query.name = filter.name;
+    }
+    const response = await Theatre.find(query);
     return response;
   } catch (err) {
     console.log(err);
