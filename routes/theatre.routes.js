@@ -23,6 +23,11 @@ const routes = (app) => {
     '/mba/api/v1/theatre/:id',
     theatreController.updateTheatre
   )
+
+    app.get(
+    '/mba/api/v1/theatre',
+    theatreController.getAllTheatres
+  );
 }
 
 module.exports = routes;

@@ -75,9 +75,23 @@ const updateTheatre = async (req, res) => {
   }
 }
 
+const getAllTheatres = async (req, res) => {
+  try {
+    const response = await theatreService.getAllTheTheatres();
+    successResponseBody.data = response;
+    successResponseBody.message = "Successfully fetched the theatre list.";
+    return res.status(200).json(successResponseBody);
+  } catch (err) {
+    errorResponseBody.err = err;
+    errorResponseBody.message = "Failed to get all the theatre.";
+    return res.status(500).json(errorResponseBody);
+  }
+}
+
 module.exports = {
   createTheatre,
   destroy,
   getTheatre,
-  updateTheatre
+  updateTheatre,
+  getAllTheatres
 }

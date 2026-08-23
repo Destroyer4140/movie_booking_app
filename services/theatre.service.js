@@ -68,9 +68,20 @@ const updateTheatre = async (id, data) => {
   }
 }
 
+const getAllTheTheatres = async (filter) => {
+  try {
+    const response = await Theatre.find({});
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   createTheatre,
   deleteTheatre,
   getTheatre,
-  updateTheatre
+  updateTheatre,
+  getAllTheTheatres
 }
