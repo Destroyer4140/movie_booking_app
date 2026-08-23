@@ -118,10 +118,35 @@ const getAllTheatres = async (req, res) => {
   }
 }
 
+/**
+ * Controller to update movies in a theatre.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @returns {Promise<void>}
+ */
+const updateMovieInTheatre = async (req, res) => {
+  try {
+    const response = await theatreService.updateMovieInTheatre(req.params.id, req.body.movieIds, req.body.insert);
+    if (response.err) {
+      errorResponseBody.err = response.err;
+      errorResponseBody.message = "No Theatre found with provided TheatreId. Hence updation failed.";
+      return res.status(response.code).json(errorResponseBody);
+    }
+    successResponseBody.data = response;
+    successResponseBody.message = "Successfully updated the movie in the theatre.";
+    return res.status(200).json(successResponseBody);
+  } catch (err) {
+      errorResponseBody.err = err;
+      errorResponseBody.message = "Failed to update the movie in the theatre.";
+      return res.status(500).json(errorResponseBody);
+  }
+}
+
 module.exports = {
   createTheatre,
   destroy,
   getTheatre,
   updateTheatre,
-  getAllTheatres
+  getAllTheatres,
+  updateMovieInTheatre
 }

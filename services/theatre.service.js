@@ -104,6 +104,40 @@ const getAllTheTheatres = async (filter) => {
 }
 
 /**
+ *  updateMovieInTheatre is a function that updates the list of movies associated with a specific theatre. It can either add new movie IDs to the theatre's list or remove existing ones based on the 'insert' flag.
+ * @param  theatreId  -> The ID of the theatre to be updated.
+ * @param  movieId -> An array of movie IDs to be added or removed from the theatre's list.
+ * @param  insert -> A boolean flag indicating whether to add (true) or remove (false) the specified movie IDs.
+ * @returns -> returns the updated theatre object.
+ */
+const updateMovieInTheatre = async (theatreId, movieId, insert) => {
+  try {
+    const theatre = await Theatre.findById(theatreId);
+    if (!theatre) {
+      return {
+        err: "No Theatre Found for the provided TheatreId",
+        code: 404
+      }
+    }
+    if (insert) {
+      // Add the movieId to the theatre's movies array if it doesn't already exist
+      movieId.forEach(id => {
+        if (!theatre.movies.includes(id)) {
+          theatre.movies.push(id);
+        }
+      });
+    } else {
+      // Remove the movieId from the theatre's movies array
+      theatre.movies = theatre.movies.filter(id => !movieId.includes(id.toString()));
+    }
+    const updatedTheatre = await theatre.save();
+    return updatedTheatre.populate('movies'); // Populate the movies field with movie details
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
  * Exporting the service functions for use in other parts of the application.
  */
 module.exports = {
@@ -111,5 +145,6 @@ module.exports = {
   deleteTheatre,
   getTheatre,
   updateTheatre,
-  getAllTheTheatres
+  getAllTheTheatres,
+  updateMovieInTheatre
 }
