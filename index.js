@@ -20,14 +20,6 @@ const PORT = process.env.PORT
 MovieRoutes(app); //invoking the movie routes.
 TheatreRoutes(app);
 
-
-app.get('/home', (req, res) => {
-  return res.json({
-    success: false
-  });
-});
-
-
 app.listen(PORT,async () => {
   // this executed once server started successfully.
   console.log(`Server started on Port ${PORT}`);

@@ -45,6 +45,10 @@ const movieSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
+/**
+ * Creates a Mongoose model for the movie schema.
+ * This model will be used to interact with the 'movies' collection in the MongoDB database.
+ */
 const Movie = mongoose.model('Movie', movieSchema); //create a new model
 
 module.exports = Movie; //returning the model

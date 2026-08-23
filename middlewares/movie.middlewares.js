@@ -1,5 +1,12 @@
 const { badRequestResponse } = require('../utils/responsebody');
 
+/**
+ * Middleware to validate the request for creating a new movie.
+ * @param {*} req - The request object.
+ * @param {*} res - The response object.
+ * @param {*} next - The next middleware function.
+ * @returns {void}
+ */
 const validateMovieCreateRequest = async (req, res, next) => {
   // validate the movie name
   if (!req?.body?.name) {

@@ -1,6 +1,12 @@
 const theatreService = require('../services/theatre.service');
 const { successResponseBody, errorResponseBody } = require('../utils/responsebody');
 
+/**
+ * Controller to create a new theatre.
+ * @param {*} req - The request object.
+ * @param {*} res - The response object.
+ * @returns {Promise<void>}
+ */
 const createTheatre = async (req, res) => {
   try {
     const response = await theatreService.createTheatre(req.body);
@@ -20,6 +26,12 @@ const createTheatre = async (req, res) => {
   }
 }
 
+/**
+ * Controller to delete a theatre by ID.
+ * @param {*} req - The request object.
+ * @param {*} res - The response object.
+ * @returns {Promise<void>}
+ */
 const destroy = async (req, res) => {
   try {
     const response = await theatreService.deleteTheatre({ _id: req?.params?.id });
@@ -38,6 +50,12 @@ const destroy = async (req, res) => {
   }
 }
 
+/**
+ * Controller to get a theatre by ID.
+ * @param {*} req - The request object.
+ * @param {*} res - The response object.
+ * @returns {Promise<void>}
+ */
 const getTheatre = async (req, res) => {
   try {
     const response = await theatreService.getTheatre(req?.params?.id);
@@ -57,6 +75,12 @@ const getTheatre = async (req, res) => {
   }
 }
 
+/**
+ * Controller to update a theatre by ID.
+ * @param {*} req - The request object.
+ * @param {*} res - The response object.
+ * @returns {Promise<void>}
+ */
 const updateTheatre = async (req, res) => {
   try {
     const response = await theatreService.updateTheatre(req.params.id, req.body);
@@ -75,6 +99,12 @@ const updateTheatre = async (req, res) => {
   }
 }
 
+/**
+ * Controller to get all theatres.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @returns {Promise<void>}
+ */
 const getAllTheatres = async (req, res) => {
   try {
     const response = await theatreService.getAllTheTheatres();

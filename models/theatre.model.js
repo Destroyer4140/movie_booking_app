@@ -22,6 +22,10 @@ const theatreSchema = new mongoose.Schema({
   address: String
 }, { timestamps: true });
 
+/**
+ * Creates a Mongoose model for the theatre schema.
+ * This model will be used to interact with the 'theatres' collection in the MongoDB database.
+ */
 const Theatre = mongoose.model('Theatre', theatreSchema);
 
 module.exports = Theatre;

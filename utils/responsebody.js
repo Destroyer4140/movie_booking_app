@@ -1,3 +1,6 @@
+/**
+ * This object will be used as a template for building error responses
+ */
 const errorResponseBody = {
   err: {},
   data: {},
@@ -5,6 +8,9 @@ const errorResponseBody = {
   success: false
 }
 
+/**
+ * This object will be used as a template for building success responses
+ */
 const successResponseBody = {
   err: {},
   data: {},
@@ -12,6 +18,9 @@ const successResponseBody = {
   success: true
 }
 
+/**
+ * This object will be used as a template for building bad request responses
+ */
 const badRequestResponse = {
   success: false,
   err: "",
@@ -19,6 +28,9 @@ const badRequestResponse = {
   message: "Malformed Request | Bad Request."
 }
 
+/**
+ * Exporting the variable from here.
+ */
 module.exports = {
   successResponseBody,
   errorResponseBody,

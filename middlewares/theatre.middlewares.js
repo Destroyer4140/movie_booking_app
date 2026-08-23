@@ -1,5 +1,12 @@
 const { badRequestResponse } = require('../utils/responsebody');
 
+/**
+ * Middleware to validate the request for creating a new theatre.
+ * @param {*} req - The request object.
+ * @param {*} res - The response object.
+ * @param {*} next - The next middleware function.
+ * @returns {void}
+ */
 const validateTheatreCreateRequest = async (req, res, next) => {
   // validate the theatre name
   if (!req?.body?.name || req?.body?.name.length < 5) {

@@ -1,33 +1,56 @@
 const theatreController = require('../controllers/theatre.controller');
 const theatreMiddleware= require('../middlewares/theatre.middlewares');
 
-
+/**
+ * 
+ * @param app -> Express application instance to which the routes will be attached.
+ * This function defines the routes for theatre-related operations, including creating, deleting, fetching, and updating theatres.
+ */
 const routes = (app) => {
+
+  /**
+   * Route to create a new theatre endpoint.
+   */
   app.post(
     '/mba/api/v1/theatre',
     theatreMiddleware.validateTheatreCreateRequest,
     theatreController.createTheatre
   );
 
+  /**
+   * Route to delete a theatre by ID.
+   */
   app.delete(
     '/mba/api/v1/theatre/:id',
     theatreController.destroy
   );
 
+  /**
+   * Route to fetch a theatre by ID.
+   */
   app.get(
     '/mba/api/v1/theatre/:id',
     theatreController.getTheatre
   );
 
+  /**
+   * Route to update a theatre by ID.
+   */
   app.put(
     '/mba/api/v1/theatre/:id',
     theatreController.updateTheatre
   )
 
-    app.get(
+  /**
+   * Route to fetch all theatres.
+   */
+  app.get(
     '/mba/api/v1/theatre',
     theatreController.getAllTheatres
   );
 }
 
+/**
+ * Exporting the routes function for use in other parts of the application.
+ */
 module.exports = routes;

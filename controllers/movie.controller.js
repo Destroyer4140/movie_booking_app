@@ -27,10 +27,10 @@ const createMovie = async (req, res) => {
 }
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * Controller to delete a movie by ID.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @returns {Promise<void>}
  */
 const deleteMovie = async (req, res) => {
   try {
@@ -54,10 +54,10 @@ const deleteMovie = async (req, res) => {
 }
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * Controller to get a movie by ID.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @returns {Promise<void>}
  */
 const getMovie =  async (req, res) => {
 
@@ -77,6 +77,12 @@ const getMovie =  async (req, res) => {
   }
 }
 
+/**
+ * Controller to update a movie by ID.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @returns {Promise<void>}
+ */
 const updateMovie = async (req, res) => {
   try {
     const response = await movieService.updateMovieById(req?.params?.id, req?.body);
@@ -96,6 +102,12 @@ const updateMovie = async (req, res) => {
   }
 }
 
+/**
+ * Controller to get all movies.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @returns {Promise<void>}
+ */
 const getMovies = async (req, res) => {
   try {
     const response = await movieService.fetchMovies(req.query);
@@ -116,6 +128,9 @@ const getMovies = async (req, res) => {
   }
 }
 
+/**
+ * Exporting the controller functions for movie operations.
+ */
 module.exports = {
   createMovie,
   deleteMovie,
