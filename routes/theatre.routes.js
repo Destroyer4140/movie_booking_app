@@ -65,9 +65,18 @@ const routes = (app) => {
     theatreMiddleware.validateUpdateMovieRequest,
     theatreController.updateMovieInTheatre
   );
+
+  /**
+   * Route to fetch movies in a theatre.
+   */
+  app.get(
+    '/mba/api/v1/theatre/:id/movies',
+    theatreController.getMoviesInATheatre
+  );
 }
 
-/**
+
+ /**
  * Exporting the routes function for use in other parts of the application.
  */
 module.exports = routes;

@@ -142,10 +142,31 @@ const updateMovieInTheatre = async (req, res) => {
   }
 }
 
+const getMoviesInATheatre = async (req, res) => {
+  try {
+    console.log("Fetching movies in theatre with ID:", req.params.id);
+    const response = await theatreService.getMoviesInATheatre(req.params.id);
+    if (response.err) {
+      errorResponseBody.err = response.err;
+      errorResponseBody.message = "No Theatre found with provided TheatreId.";
+      return res.status(response.code).json(errorResponseBody);
+    }
+    successResponseBody.data = response;
+    successResponseBody.message = "Successfully fetched movies in the theatre.";
+    return res.status(200).json(successResponseBody);
+  } catch (err) {
+    console.error("Error fetching movies in theatre:", err);
+    errorResponseBody.err = err;
+    errorResponseBody.message = "Failed to get movies in the theatre.";
+    return res.status(500).json(errorResponseBody);
+  }
+}
+
 module.exports = {
   createTheatre,
   destroy,
   getTheatre,
+  getMoviesInATheatre,
   updateTheatre,
   getAllTheatres,
   updateMovieInTheatre

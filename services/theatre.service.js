@@ -195,6 +195,21 @@ const updateMovieInTheatre = async (theatreId, movieId, insert) => {
   }
 }
 
+const getMoviesInATheatre = async (theatreId) => {
+  try {
+    const theatre = await Theatre.findById(theatreId, {name: 1, movies: 1, address: 1}).populate('movies');
+    if (!theatre) {
+      return {
+        err: "No Theatre Found for the provided TheatreId",
+        code: 404
+      }
+    }
+    return theatre;
+  } catch (error) {
+    throw error;
+  }
+}
+
 /**
  * Exporting the service functions for use in other parts of the application.
  */
@@ -204,5 +219,6 @@ module.exports = {
   getTheatre,
   updateTheatre,
   getAllTheTheatres,
-  updateMovieInTheatre
+  updateMovieInTheatre,
+  getMoviesInATheatre
 }
