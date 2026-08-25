@@ -1,4 +1,5 @@
 const Theatre = require('../models/theatre.model');
+const Movie = require('../models/movie.model');
 
 /**
  * 
@@ -108,6 +109,12 @@ const getAllTheTheatres = async (filter) => {
     if (filter && filter.name) {
       // this checks whether name is present in query params or not.
       query.name = filter.name;
+    }
+
+    if (filter && filter.movieId) {
+      // this checks whether movieId is present in query params or not.
+      // let movie = await Movie.findById(filter.movieId);
+      query.movies = {$all: filter.movieId};
     }
 
     if (filter && filter.limit) {

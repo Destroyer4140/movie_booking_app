@@ -16,6 +16,8 @@ env.config();
 
 const PORT = process.env.PORT
 
+mongoose.set('debug', true); // enabling debug mode for mongoose.
+
 
 MovieRoutes(app); //invoking the movie routes.
 TheatreRoutes(app);
