@@ -41,6 +41,14 @@ const routes = (app) => {
     theatreController.updateTheatre
   )
 
+   /**
+   * Route to partially update a theatre by ID.
+   */
+  app.patch(
+    '/mba/api/v1/theatre/:id',
+    theatreController.updateTheatre
+  )
+
   /**
    * Route to fetch all theatres.
    */
