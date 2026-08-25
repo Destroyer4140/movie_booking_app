@@ -96,6 +96,7 @@ const updateTheatre = async (id, data) => {
 const getAllTheTheatres = async (filter) => {
   try {
     let query = {};
+    let pagination = {};
     if (filter && filter.city) {
       // this checks whether city is present in query params or not.
       query.city = filter.city;
@@ -108,7 +109,17 @@ const getAllTheTheatres = async (filter) => {
       // this checks whether name is present in query params or not.
       query.name = filter.name;
     }
-    const response = await Theatre.find(query);
+
+    if (filter && filter.limit) {
+      pagination.limit = parseInt(filter.limit);
+    }
+
+    if (filter && filter.skip) {
+      let perPage = (filter.limit) ? parseInt(filter.limit) : 5; // Default to 5 if limit is not provided
+      pagination.skip = parseInt(filter.skip)*perPage;
+    }
+
+    const response = await Theatre.find(query, {}, pagination);
     return response;
   } catch (err) {
     console.log(err);
