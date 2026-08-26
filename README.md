@@ -112,3 +112,26 @@
 - npm i nodemon -> to install nodemon
 - npm i dotenv -> for env varibale setup
 - 
+
+
+## After the setup of theatre and movie resource, we want to start setting up authentication and authorization.
+
+### Agenda
+ - Understand Authentication and Authorization.
+ - Token based authentication.
+ - Setup model for the user collection.
+ - APIs for User registration. (new User)
+ - APIs for user login. (Basic)
+ - Modify the login api to Token based authentication.
+ - Secure storgae of passwords.
+ - APIs for password reset.
+ - Move to authorization, registration & setup of admin and client.
+ - Both Authetication and Authorization are often used in conjunction with each other in terms of security.
+ - Both terms are very different with totally different concepts.
+ 
+### Authentication
+- Process of verifying the identity of a user by obtaining their credentials and use those to verify the user's identity.
+- It always comes before authorization.
+- We are already familiar with process of authetication, bcs most of use perform it everyday.
+- Once authenticatied there are many decission that happen simultaneously in the background bcs of secret power of admin.
+- 
