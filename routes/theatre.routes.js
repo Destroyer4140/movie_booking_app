@@ -73,6 +73,14 @@ const routes = (app) => {
     '/mba/api/v1/theatre/:id/movies',
     theatreController.getMoviesInATheatre
   );
+
+  /**
+   * Route to fetch a specific movie in a theatre by movie ID.
+   */
+  app.get(
+    '/mba/api/v1/theatre/:id/movies/:movieId',
+    theatreController.checkMovieInTheatre,
+  );
 }
 
 
