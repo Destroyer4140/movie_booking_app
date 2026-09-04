@@ -1,5 +1,6 @@
 const {errorResponseBody} = require('../utils/responseBody');
-
+const jwt = require('jsonwebtoken');
+const userService = require('../services/user.service');
 /**
  * Middleware to validate signup request
  * @param  req -> { username, email, password }
@@ -61,8 +62,43 @@ const validateSigninRequest = async (req, res, next) => {
   next();
 }
 
+/**
+ * Middleware to check if user is authenticated
+ * @param req -> Request object containing headers with x-access-token
+ * @param res -> Response object to send error response if authentication fails
+ * @param next -> Next middleware function to call if authentication passes
+ * @returns -> Calls next() if authentication passes, otherwise sends error response
+ */
+const isAuthenticated = (req, res, next) => {
+  try {
+    const token = req.headers['x-access-token'];
+    if (!token) {
+      errorResponseBody.err = 'No token provided';
+      errorResponseBody.message = 'Authentication failed, due to missing token';
+      return res.status(403).json(errorResponseBody);
+    }
+    const response = jwt.verify(token, process.env.AUTH_KEY);
+    if (!response) {
+      errorResponseBody.err = 'Failed to authenticate token';
+      errorResponseBody.message = 'Authentication failed, due to invalid token';
+      return res.status(401).json(errorResponseBody);
+    }
+    const user = userService.getUserById(response.id);
+    req.user = user;
+    next();
+  } catch (error) {
+    if (error.code && error.code == 404) {
+      errorResponseBody.err = 'User not found';
+      return res.status(error.code).json(errorResponseBody);
+    }
+    errorResponseBody.err = error;
+    errorResponseBody.message = 'Authentication failed, due to invalid token';
+    return res.status(500).json(errorResponseBody);
+  }
+}
 
 module.exports = {
   validateSignupRequest,
-  validateSigninRequest
+  validateSigninRequest,
+  isAuthenticated
 };
