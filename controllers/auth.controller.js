@@ -10,7 +10,11 @@ const signup = async (req, res) => {
     successResponseBody.data = response;
     res.status(201).json(successResponseBody);
   } catch (error) {
-    console.error('Error during signup:', error);
+    if (error.err) {
+      errorResponseBody.err = error.err;
+      errorResponseBody.message = "Failed to signup";
+      return res.status(error.code).json(errorResponseBody);
+    }
     errorResponseBody.message = 'Internal server error';
     errorResponseBody.err = error;
     res.status(500).json(errorResponseBody);
