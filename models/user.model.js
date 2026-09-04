@@ -42,12 +42,20 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {
-  const user = this;
-  const hash = await bcrypt.hash(user.password, 10);
+  const hash = await bcrypt.hash(this.password, 10);
   this.password = hash;
+  next();
 });
 
-
+/**
+ * This is going to be an instance method for user, to compare password with the hashed password stored in database.
+ * @param password :- Input password given by user during singin or login.
+ * @returns boolean denoting whether the input password is valid or not.
+ */
+userSchema.methods.isValidPassword = async function (password) {
+  const compare = await bcrypt.compare(password, this.password);
+  return compare;
+}
 
 const User = mongoose.model('User', userSchema);
 

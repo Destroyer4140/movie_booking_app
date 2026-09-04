@@ -9,6 +9,8 @@ const routes = (app) => {
     authMiddleware.validateSignupRequest,
     authController.signup
   );
+
+  // SignIn or Login route to controller
 };
 
 module.exports = routes;
