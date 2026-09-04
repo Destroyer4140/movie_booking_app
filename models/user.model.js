@@ -42,9 +42,9 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {
-  const hash = await bcrypt.hash(this.password, 10);
-  this.password = hash;
-  next();
+    // a trigger to encrypt the plain password before saving the user
+    const hash = await bcrypt.hash(this.password, 10);
+    this.password = hash;
 });
 
 /**

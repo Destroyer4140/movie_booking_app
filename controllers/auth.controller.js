@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const userService = require('../services/user.service');
 const {successResponseBody, errorResponseBody } = require('../utils/responsebody');
 
@@ -21,6 +22,45 @@ const signup = async (req, res) => {
   }
 }
 
+const signin = async (req, res) => {
+  try {
+    const user = await userService.getUserByEmail(req.body.email);
+    const isValidPassword = await user.isValidPassword(req.body.password);
+    if (!isValidPassword) {
+      throw {
+        err: "Invalid password for the given email",
+        code: 401
+      };
+    }
+    const token = jwt.sign
+      (
+      { id: user._id, email: user.email },
+      process.env.AUTH_KEY,
+      { expiresIn: '1h' }
+    );
+    
+    console.log("Verified Token :- ",jwt.verify(token, process.env.AUTH_KEY));
+    successResponseBody.message = 'Successfully signed in';
+    successResponseBody.data = {
+      email: user.email,
+      role: user.userRole,
+      status: user.userStatus,
+      token: token
+    };
+    res.status(200).json(successResponseBody);
+  } catch (error) {
+    if(error.err) {
+      errorResponseBody.err = error.err;
+      errorResponseBody.message = "Failed to signin";
+      return res.status(error.code).json(errorResponseBody);
+    }
+    errorResponseBody.message = 'Internal server error';
+    errorResponseBody.err = error;
+    res.status(500).json(errorResponseBody);
+  }
+}
+
 module.exports = {
-  signup
+  signup,
+  signin
 }
