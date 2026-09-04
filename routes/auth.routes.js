@@ -13,7 +13,7 @@ const routes = (app) => {
   // SignIn or Login route to controller
   app.post(
     '/mba/api/v1/auth/signin',
-    // authMiddleware.validateSigninRequest,
+    authMiddleware.validateSigninRequest,
     authController.signin
   );
 };
