@@ -1,5 +1,6 @@
 const theatreService = require('../services/theatre.service');
 const { successResponseBody, errorResponseBody } = require('../utils/responsebody');
+const { STATUS } = require('../utils/constants');
 
 /**
  * Controller to create a new theatre.
@@ -42,11 +43,11 @@ const destroy = async (req, res) => {
         }
         successResponseBody.data = response;
         successResponseBody.message = "Successfully deleted the theatre";
-        return res.status(200).json(successResponseBody);
+        return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     errorResponseBody.err = err;
     errorResponseBody.message = "failed to delete the theatre";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -91,11 +92,11 @@ const updateTheatre = async (req, res) => {
     }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully updated the theatre.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
       errorResponseBody.err = err;
       errorResponseBody.message = "Failed to update the theatre.";
-      return res.status(500).json(errorResponseBody);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -110,11 +111,11 @@ const getAllTheatres = async (req, res) => {
     const response = await theatreService.getAllTheTheatres(req.query);
     successResponseBody.data = response;
     successResponseBody.message = "Successfully fetched the theatre list.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     errorResponseBody.err = err;
     errorResponseBody.message = "Failed to get all the theatre.";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -134,11 +135,11 @@ const updateMovieInTheatre = async (req, res) => {
     }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully updated the movie in the theatre.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
       errorResponseBody.err = err;
       errorResponseBody.message = "Failed to update the movie in the theatre.";
-      return res.status(500).json(errorResponseBody);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -153,12 +154,12 @@ const getMoviesInATheatre = async (req, res) => {
     }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully fetched movies in the theatre.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     console.error("Error fetching movies in theatre:", err);
     errorResponseBody.err = err;
     errorResponseBody.message = "Failed to get movies in the theatre.";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -172,11 +173,11 @@ const checkMovieInTheatre = async (req, res) => {
     }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully movie checked in theatre.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     errorResponseBody.err = err;
     errorResponseBody.message = "Failed to get the movie in the theatre.";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 

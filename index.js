@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const app = express(); //express object
 const MovieRoutes = require("./routes/movie.routes");
 const TheatreRoutes = require('./routes/theatre.routes');
+const AuthRoutes = require('./routes/auth.routes');
+const UserRoutes = require('./routes/user.routes');
 
 // Configuring body parser
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -18,9 +20,10 @@ const PORT = process.env.PORT
 
 mongoose.set('debug', true); // enabling debug mode for mongoose.
 
-
+AuthRoutes(app);
 MovieRoutes(app); //invoking the movie routes.
 TheatreRoutes(app);
+UserRoutes(app);
 
 app.listen(PORT,async () => {
   // this executed once server started successfully.
