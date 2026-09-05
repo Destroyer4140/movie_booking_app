@@ -1,5 +1,6 @@
 const Theatre = require('../models/theatre.model');
 const Movie = require('../models/movie.model');
+const { STATUS } = require('../utils/constants');
 
 /**
  * 
@@ -16,9 +17,9 @@ const createTheatre = async (data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return {
+      throw {
         err: err,
-        code: 422
+        code: STATUS.UNPROCESSABLE_ENTITY
       }
     } else {
       throw new error;
@@ -36,7 +37,7 @@ const deleteTheatre = async (id) => {
   if (theatre.deletedCount === 0) {
     return {
       err: "No Movie Found for the provided theatreId.",
-      code: 404,
+      code: STATUS.NOT_FOUND,
     }
   }
   return theatre;
@@ -52,7 +53,7 @@ const getTheatre = async (id) => {
   if (!theatre) {
     return {
       err: "No Theatre Found for the provided theatreId.",
-      code: 404,
+      code: STATUS.NOT_FOUND,
     }
   }
   return theatre;
@@ -73,7 +74,7 @@ const updateTheatre = async (id, data) => {
     if (!updatedTheatreResp) {
       return {
         err: "No Theatre Found for the provided TheatreId",
-        code: 404
+        code: STATUS.NOT_FOUND
       }
     }
     return updatedTheatreResp;
@@ -83,7 +84,7 @@ const updateTheatre = async (id, data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return { err, code: 422 };
+      return { err, code: STATUS.UNPROCESSABLE_ENTITY };
     }
     throw error;
   }
@@ -201,7 +202,7 @@ const getMoviesInATheatre = async (theatreId) => {
     if (!theatre) {
       return {
         err: "No Theatre Found for the provided TheatreId",
-        code: 404
+        code: STATUS.NOT_FOUND
       }
     }
     return theatre;
@@ -219,7 +220,7 @@ const checkMovieInTheatre = async (theatreId, movieId) => {
     if (!theatre || !theatre.movies.length) {
       return {
         err: "No Theatre or Movie found with provided IDs.",
-        code: 404
+        code: STATUS.NOT_FOUND
       };
     }
     return theatre.movies.indexOf(movieId) !== -1 ;

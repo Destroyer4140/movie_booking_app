@@ -11,19 +11,18 @@ const { STATUS } = require('../utils/constants');
 const createTheatre = async (req, res) => {
   try {
     const response = await theatreService.createTheatre(req.body);
-    if (response.err) {
-      errorResponseBody.err = response.err;
-      errorResponseBody.message = "Failed on schema validation.";
-      return res.status(response.code).json(errorResponseBody);
-    }
-
     successResponseBody.data = response;
     successResponseBody.message = "Successfully created the theatre";
-    return res.status(201).json(successResponseBody);
+    return res.status(STATUS.CREATED).json(successResponseBody);
   } catch (error) {
-    errorResponseBody.err = err;
+    if (error.err) {
+      errorResponseBody.err = error.err;
+      errorResponseBody.message = "Validation error while creating the theatre";
+      return res.status(error.code).json(errorResponseBody);
+    }
+    errorResponseBody.err = error;
     errorResponseBody.message = "failed to create the theatre";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -68,11 +67,11 @@ const getTheatre = async (req, res) => {
 
     successResponseBody.data = response;
     successResponseBody.message = "Successfully fetched the theatre.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     errorResponseBody.err = err;
     errorResponseBody.message = "Failed to get the theatre.";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 

@@ -1,6 +1,7 @@
 const Movie = require('../models/movie.model');
 const movieService = require('../services/movies.service');
-const {successResponseBody, errorResponseBody} = require('../utils/responsebody')
+const { successResponseBody, errorResponseBody } = require('../utils/responsebody')
+const { STATUS } = require('../utils/constants');
 
 /**
  * Controller function to create a new movie
@@ -18,11 +19,11 @@ const createMovie = async (req, res) => {
     }
     successResponseBody.data = response
     successResponseBody.message = "Successfully created a new movie.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.CREATED).json(successResponseBody);
   } catch (err) {
     console.log(err);
     errorResponseBody.err = err;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -44,12 +45,12 @@ const deleteMovie = async (req, res) => {
     }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully deleted the movie";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     console.log(err);
     errorResponseBody.err = err;
     errorResponseBody.message = "Something went wrong, Failed to  delete the movie";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -68,12 +69,12 @@ const getMovie =  async (req, res) => {
       return res.status(movie.code).json(errorResponseBody);
     }
     successResponseBody.data = movie
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
 
   } catch (err) {
     console.log(err);
     errorResponseBody.err = err;
-    return res.status(200).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -93,12 +94,12 @@ const updateMovie = async (req, res) => {
     }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully updated the movies.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     console.log(err);
     errorResponseBody.err = err;
     errorResponseBody.message = "Failed to updated the movies.";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -119,12 +120,12 @@ const getMovies = async (req, res) => {
 
     successResponseBody.data = response;
     successResponseBody.message = "Successfully fetched the list of movies.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
 
   } catch (err) {
     console.log(err);
     errorResponseBody.err = err;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
