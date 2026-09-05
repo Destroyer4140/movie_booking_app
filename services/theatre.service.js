@@ -1,5 +1,6 @@
 const Theatre = require('../models/theatre.model');
 const Movie = require('../models/movie.model');
+const { STATUS } = require('../utils/constants');
 
 /**
  * 
@@ -16,9 +17,9 @@ const createTheatre = async (data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return {
+      throw {
         err: err,
-        code: 422
+        code: STATUS.UNPROCESSABLE_ENTITY
       }
     } else {
       throw new error;
@@ -34,9 +35,9 @@ const createTheatre = async (data) => {
 const deleteTheatre = async (id) => {
   const theatre = await Theatre.deleteOne(id);
   if (theatre.deletedCount === 0) {
-    return {
+    throw {
       err: "No Movie Found for the provided theatreId.",
-      code: 404,
+      code: STATUS.NOT_FOUND,
     }
   }
   return theatre;
@@ -50,9 +51,9 @@ const deleteTheatre = async (id) => {
 const getTheatre = async (id) => {
   const theatre = await Theatre.findById(id);
   if (!theatre) {
-    return {
+    throw {
       err: "No Theatre Found for the provided theatreId.",
-      code: 404,
+      code: STATUS.NOT_FOUND,
     }
   }
   return theatre;
@@ -71,9 +72,9 @@ const updateTheatre = async (id, data) => {
       runValidators: true
     });
     if (!updatedTheatreResp) {
-      return {
+      throw {
         err: "No Theatre Found for the provided TheatreId",
-        code: 404
+        code: STATUS.NOT_FOUND
       }
     }
     return updatedTheatreResp;
@@ -83,7 +84,7 @@ const updateTheatre = async (id, data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return { err, code: 422 };
+      return { err, code: STATUS.UNPROCESSABLE_ENTITY };
     }
     throw error;
   }
@@ -142,30 +143,6 @@ const getAllTheTheatres = async (filter) => {
  * @returns -> returns the updated theatre object.
  */
 const updateMovieInTheatre = async (theatreId, movieId, insert) => {
-  // try {
-  //   const theatre = await Theatre.findById(theatreId);
-  //   if (!theatre) {
-  //     return {
-  //       err: "No Theatre Found for the provided TheatreId",
-  //       code: 404
-  //     }
-  //   }
-  //   if (insert) {
-  //     // Add the movieId to the theatre's movies array if it doesn't already exist
-  //     movieId.forEach(id => {
-  //       if (!theatre.movies.includes(id)) {
-  //         theatre.movies.push(id);
-  //       }
-  //     });
-  //   } else {
-  //     // Remove the movieId from the theatre's movies array
-  //     theatre.movies = theatre.movies.filter(id => !movieId.includes(id.toString()));
-  //   }
-  //   const updatedTheatre = await theatre.save();
-  //   return updatedTheatre.populate('movies'); // Populate the movies field with movie details
-  // } catch (error) {
-  //   throw error;
-  // }
   let theatre;
   try {
     if (insert) {
@@ -186,9 +163,9 @@ const updateMovieInTheatre = async (theatreId, movieId, insert) => {
     return theatre.populate('movies');
   } catch (error) {
     if(error.name === 'TypeError') {
-      return {
+      throw {
         err: "Invalid Theatre ID",
-        code: 404
+        code: STATUS.BAD_REQUEST
       };
     }
     throw error;
@@ -199,9 +176,9 @@ const getMoviesInATheatre = async (theatreId) => {
   try {
     const theatre = await Theatre.findById(theatreId, {name: 1, movies: 1, address: 1}).populate('movies');
     if (!theatre) {
-      return {
+      throw {
         err: "No Theatre Found for the provided TheatreId",
-        code: 404
+        code: STATUS.NOT_FOUND
       }
     }
     return theatre;
@@ -217,9 +194,9 @@ const checkMovieInTheatre = async (theatreId, movieId) => {
       match: { _id: movieId }
     });
     if (!theatre || !theatre.movies.length) {
-      return {
+      throw {
         err: "No Theatre or Movie found with provided IDs.",
-        code: 404
+        code: STATUS.NOT_FOUND
       };
     }
     return theatre.movies.indexOf(movieId) !== -1 ;

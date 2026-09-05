@@ -1,6 +1,7 @@
 const Movie = require('../models/movie.model');
 const movieService = require('../services/movies.service');
-const {successResponseBody, errorResponseBody} = require('../utils/responsebody')
+const { successResponseBody, errorResponseBody } = require('../utils/responsebody')
+const { STATUS } = require('../utils/constants');
 
 /**
  * Controller function to create a new movie
@@ -11,18 +12,17 @@ const {successResponseBody, errorResponseBody} = require('../utils/responsebody'
 const createMovie = async (req, res) => {
   try {
     const response = await movieService.createMovie(req.body);
-    if (response.err) {
-      errorResponseBody.err = response.err;
-      errorResponseBody.message = "Validation failed for few parameters of the request body."
-      return res.status(response.code).json(errorResponseBody);
-    }
     successResponseBody.data = response
     successResponseBody.message = "Successfully created a new movie.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.CREATED).json(successResponseBody);
   } catch (err) {
-    console.log(err);
+    if (err.err) {
+      errorResponseBody.err = err.err;
+      errorResponseBody.message = "Validation failed, please check the request body.";
+      return res.status(err.code).json(errorResponseBody);
+    }
     errorResponseBody.err = err;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -38,18 +38,18 @@ const deleteMovie = async (req, res) => {
       _id: req.params.id
     });
   
-    if (response.err) {
-      errorResponseBody.err = response.err;
-      return res.status(response.code).json(errorResponseBody);
-    }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully deleted the movie";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
-    console.log(err);
+    if (err.err) {
+      errorResponseBody.err = err.err;
+      errorResponseBody.message = "No Movie found with provided MovieId.";
+      return res.status(err.code).json(errorResponseBody);
+    }
     errorResponseBody.err = err;
     errorResponseBody.message = "Something went wrong, Failed to  delete the movie";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -63,17 +63,17 @@ const getMovie =  async (req, res) => {
 
   try {
     const movie = await movieService.getMovieById(req.params.id);
-    if (movie.err) {
-      errorResponseBody.err = movie.err;
-      return res.status(movie.code).json(errorResponseBody);
-    }
     successResponseBody.data = movie
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
 
   } catch (err) {
-    console.log(err);
+    if (err.err) {
+      errorResponseBody.err = err.err;
+      errorResponseBody.message = "No Movie found with provided MovieId.";
+      return res.status(err.code).json(errorResponseBody);
+    }
     errorResponseBody.err = err;
-    return res.status(200).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -86,19 +86,18 @@ const getMovie =  async (req, res) => {
 const updateMovie = async (req, res) => {
   try {
     const response = await movieService.updateMovieById(req?.params?.id, req?.body);
-    if (response.err) {
-      errorResponseBody.err = response.err;
-      errorResponseBody.message = "Updates trying to apply doesn't validate the schema."
-      return res.status(response.code).json(errorResponseBody);
-    }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully updated the movies.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
-    console.log(err);
+    if (err.err) {
+      errorResponseBody.err = err.err;
+      errorResponseBody.message = "Updates trying to apply doesn't validate the schema.";
+      return res.status(err.code).json(errorResponseBody);
+    }
     errorResponseBody.err = err;
     errorResponseBody.message = "Failed to updated the movies.";
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -111,20 +110,17 @@ const updateMovie = async (req, res) => {
 const getMovies = async (req, res) => {
   try {
     const response = await movieService.fetchMovies(req.query);
-    if (response.err) {
-      errorResponseBody.err = response.err;
-      errorResponseBody.message = "Unable to find the movies.";
-      return res.status(response.code).json(errorResponseBody);
-    }
-
     successResponseBody.data = response;
     successResponseBody.message = "Successfully fetched the list of movies.";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
 
   } catch (err) {
-    console.log(err);
+    if (err.err) {
+      errorResponseBody.err = err.err;
+      return res.status(err.code).json(errorResponseBody);
+    }
     errorResponseBody.err = err;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 

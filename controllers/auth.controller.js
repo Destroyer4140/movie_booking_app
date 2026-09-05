@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const userService = require('../services/user.service');
-const {successResponseBody, errorResponseBody } = require('../utils/responsebody');
+const { successResponseBody, errorResponseBody } = require('../utils/responsebody');
+const { STATUS } = require('../utils/constants');
 
 
 const signup = async (req, res) => {
@@ -18,7 +19,7 @@ const signup = async (req, res) => {
     }
     errorResponseBody.message = 'Internal server error';
     errorResponseBody.err = error;
-    res.status(500).json(errorResponseBody);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -29,7 +30,7 @@ const signin = async (req, res) => {
     if (!isValidPassword) {
       throw {
         err: "Invalid password for the given email",
-        code: 401
+        code: STATUS.UNAUTHORIZED
       };
     }
     const token = jwt.sign
@@ -38,8 +39,6 @@ const signin = async (req, res) => {
       process.env.AUTH_KEY,
       { expiresIn: '1h' }
     );
-
-    console.log("Verified Token :- ",jwt.verify(token, process.env.AUTH_KEY));
     successResponseBody.message = 'Successfully signed in';
     successResponseBody.data = {
       email: user.email,
@@ -47,7 +46,7 @@ const signin = async (req, res) => {
       status: user.userStatus,
       token: token
     };
-    res.status(200).json(successResponseBody);
+    res.status(STATUS.NOT_FOUND).json(successResponseBody);
   } catch (error) {
     if(error.err) {
       errorResponseBody.err = error.err;
@@ -56,7 +55,7 @@ const signin = async (req, res) => {
     }
     errorResponseBody.message = 'Internal server error';
     errorResponseBody.err = error;
-    res.status(500).json(errorResponseBody);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -66,20 +65,20 @@ const resetPassword = async (req, res) => {
         const user = await userService.getUserById(userId);
         const isOldPasswordCorrect = await user.isValidPassword(req.body.oldPassword);
         if(!isOldPasswordCorrect) {
-            throw {err: 'Invalid old password, please write the correct old password', code: 403};
+            throw {err: 'Invalid old password, please write the correct old password', code: STATUS.FORBIDDEN};
         }
         user.password = req.body.newPassword;
         await user.save();
         successResponseBody.data = user;
         successResponseBody.message = 'Successfully updated the password for the given user';
-        return res.status(200).json(successResponseBody);
+        return res.status(STATUS.OK).json(successResponseBody);
     } catch (error) {
         if(error.err) {
             errorResponseBody.err = error.err;
             return res.status(error.code).json(errorResponseBody);
         }
         errorResponseBody.err = error;
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 }
 

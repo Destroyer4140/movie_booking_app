@@ -1,4 +1,5 @@
-const {errorResponseBody } = require('../utils/responsebody');
+const { errorResponseBody } = require('../utils/responsebody');
+const { STATUS } = require('../utils/constants');
 
 const validateUpdateUserRequest = (req, res, next) => {
   const { userRole, userStatus } = req.body;
@@ -7,7 +8,7 @@ const validateUpdateUserRequest = (req, res, next) => {
   if (!userRole && !userStatus) {
     errorResponseBody.err = 'User role or status is not provided in request body';
     errorResponseBody.message = 'Malformed request, cannot process the request';
-    return res.status(400).json(errorResponseBody);
+    return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
   }
   next();
 }

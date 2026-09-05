@@ -1,7 +1,7 @@
 const {errorResponseBody} = require('../utils/responseBody');
 const jwt = require('jsonwebtoken');
 const userService = require('../services/user.service');
-const { USER_ROLE, USER_STATUS } = require('../utils/constants');
+const { USER_ROLE, STATUS } = require('../utils/constants');
 /**
  * Middleware to validate signup request
  * @param  req -> { username, email, password }
@@ -16,21 +16,21 @@ const validateSignupRequest = async (req, res, next) => {
   if (!username) {
     errorResponseBody.err = 'Username is not provided in request body';
     errorResponseBody.message = 'Something went wrong, can not process the request'
-    return res.status(400).json(errorResponseBody);
+    return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
   }
 
   // Validate email of the user.
   if (!email) {
     errorResponseBody.err = 'Email is not provided in request body';
     errorResponseBody.message = 'Something went wrong, can not process the request'
-    return res.status(400).json(errorResponseBody);
+    return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
   }
 
   // Validate password of the user.
   if (!password) {
     errorResponseBody.err = 'Password is not provided in request body';
     errorResponseBody.message = 'Something went wrong, can not process the request'
-    return res.status(400).json(errorResponseBody);
+    return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
   }
 
   next();
@@ -50,14 +50,14 @@ const validateSigninRequest = async (req, res, next) => {
   if (!email) {
     errorResponseBody.err = 'Email is not provided in request body';
     errorResponseBody.message = 'Something went wrong, can not process the request'
-    return res.status(400).json(errorResponseBody);
+    return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
   }
 
   // Validate password of the user.
   if (!password) {
     errorResponseBody.err = 'Password is not provided in request body';
     errorResponseBody.message = 'Something went wrong, can not process the request'
-    return res.status(400).json(errorResponseBody);
+    return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
   }
 
   next();
@@ -76,25 +76,30 @@ const isAuthenticated = (req, res, next) => {
     if (!token) {
       errorResponseBody.err = 'No token provided';
       errorResponseBody.message = 'Authentication failed, due to missing token';
-      return res.status(403).json(errorResponseBody);
+      return res.status(STATUS.FORBIDDEN).json(errorResponseBody);
     }
     const response = jwt.verify(token, process.env.AUTH_KEY);
     if (!response) {
       errorResponseBody.err = 'Failed to authenticate token';
       errorResponseBody.message = 'Authentication failed, due to invalid token';
-      return res.status(401).json(errorResponseBody);
+      return res.status(STATUS.UNAUTHORISED).json(errorResponseBody);
     }
     const user = userService.getUserById(response.id);
     req.user = user;
     next();
   } catch (error) {
-    if (error.code && error.code == 404) {
-      errorResponseBody.err = 'User not found';
+    if(error.name === 'JsonWebTokenError') {
+      errorResponseBody.err = 'Invalid token';
+      errorResponseBody.message = error.message;
+      return res.status(STATUS.UNAUTHORISED).json(errorResponseBody);
+    }
+    if (error.code == STATUS.NOT_FOUND) {
+      errorResponseBody.err = 'User doesn\'t exist';
       return res.status(error.code).json(errorResponseBody);
     }
     errorResponseBody.err = error;
     errorResponseBody.message = 'Authentication failed, due to invalid token';
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -105,14 +110,14 @@ const validateResetPasswordRequest = (req, res, next) => {
   if (!newPassword) {
     errorResponseBody.err = 'New password is not provided in request body';
     errorResponseBody.message = 'Something went wrong, can not process the request'
-    return res.status(400).json(errorResponseBody);
+    return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
   }
 
   // Validate old password of the user.
   if (!oldPassword) {
     errorResponseBody.err = 'Old password is not provided in request body';
     errorResponseBody.message = 'Something went wrong, can not process the request'
-    return res.status(400).json(errorResponseBody);
+    return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
   }
 
   next();
@@ -125,7 +130,7 @@ const isAdmin = async (req, res, next) => {
   if (user.userRole !== USER_ROLE.admin) {
     errorResponseBody.err = 'User is not authorized to perform this action';
     errorResponseBody.message = 'Authorization failed, user does not have admin privileges';
-    return res.status(403).json(errorResponseBody);
+    return res.status(STATUS.FORBIDDEN).json(errorResponseBody);
   }
 
   next();
@@ -138,7 +143,7 @@ const isClient = async (req, res, next) => {
   if (user.userRole !== USER_ROLE.client) {
     errorResponseBody.err = 'User is not authorized to perform this action';
     errorResponseBody.message = 'Authorization failed, user does not have client privileges';
-    return res.status(403).json(errorResponseBody);
+    return res.status(STATUS.FORBIDDEN).json(errorResponseBody);
   }
 
   next();
@@ -151,7 +156,7 @@ const isAdminOrClient = async (req, res, next) => {
   if (user.userRole !== USER_ROLE.admin && user.userRole !== USER_ROLE.client) {
     errorResponseBody.err = 'User is not authorized to perform this action';
     errorResponseBody.message = 'Authorization failed, user does not have admin or client privileges';
-    return res.status(403).json(errorResponseBody);
+    return res.status(STATUS.FORBIDDEN).json(errorResponseBody);
   }
 
   next();
