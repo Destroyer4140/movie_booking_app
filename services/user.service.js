@@ -62,8 +62,44 @@ const getUserById = async (id) => {
   }
 }
 
+const updateUserRoleOrStatus = async (id, data) => {
+  try {
+    const updateQuery = {};
+    if (data.userRole) {
+      updateQuery.userRole = data.userRole;
+    }
+    if (data.userStatus) {
+      updateQuery.userStatus = data.userStatus;
+    }
+    const response = await User.findOneAndUpdate(
+      { _id: id },
+      updateQuery,
+      { returnDocument: 'after', runValidators: true }
+    );
+  
+    if (!response) {
+      throw {
+        err: "No user found with the given id",
+        code: 404
+      };
+    }
+    return response;
+  } catch (error) {
+    console.log(error);
+    if (error.name === 'ValidationError') {
+      let err = {};
+      Object.keys(error.errors).forEach(key => {
+        err[key] = error.errors[key].message;
+      });
+      throw { err: err, code: 422, message: "Validation error while updating user" };
+    }
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   getUserByEmail,
-  getUserById
+  getUserById,
+  updateUserRoleOrStatus
 }
