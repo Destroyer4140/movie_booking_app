@@ -1,6 +1,7 @@
 const {errorResponseBody} = require('../utils/responseBody');
 const jwt = require('jsonwebtoken');
 const userService = require('../services/user.service');
+const { USER_ROLE, USER_STATUS } = require('../utils/constants');
 /**
  * Middleware to validate signup request
  * @param  req -> { username, email, password }
@@ -117,9 +118,52 @@ const validateResetPasswordRequest = (req, res, next) => {
   next();
 }
 
+const isAdmin = async (req, res, next) => {
+  const userId = await req.user;
+  const user = await userService.getUserById(userId);
+
+  if (user.userRole !== USER_ROLE.admin) {
+    errorResponseBody.err = 'User is not authorized to perform this action';
+    errorResponseBody.message = 'Authorization failed, user does not have admin privileges';
+    return res.status(403).json(errorResponseBody);
+  }
+
+  next();
+}
+
+const isClient = async (req, res, next) => {
+  const userId = await req.user;
+  const user = await userService.getUserById(userId);
+
+  if (user.userRole !== USER_ROLE.client) {
+    errorResponseBody.err = 'User is not authorized to perform this action';
+    errorResponseBody.message = 'Authorization failed, user does not have client privileges';
+    return res.status(403).json(errorResponseBody);
+  }
+
+  next();
+}
+
+const isAdminOrClient = async (req, res, next) => {
+  const userId = await req.user;
+  const user = await userService.getUserById(userId);
+
+  if (user.userRole !== USER_ROLE.admin && user.userRole !== USER_ROLE.client) {
+    errorResponseBody.err = 'User is not authorized to perform this action';
+    errorResponseBody.message = 'Authorization failed, user does not have admin or client privileges';
+    return res.status(403).json(errorResponseBody);
+  }
+
+  next();
+}
+
+
 module.exports = {
   validateSignupRequest,
   validateSigninRequest,
   isAuthenticated,
-  validateResetPasswordRequest
+  validateResetPasswordRequest,
+  isAdmin,
+  isClient,
+  isAdminOrClient
 };
