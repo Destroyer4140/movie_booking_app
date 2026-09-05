@@ -1,5 +1,6 @@
 const userService = require('../services/user.service');
 const { successResponseBody, errorResponseBody } = require('../utils/responsebody');
+const { STATUS } = require('../utils/constants');
 
 const update = async (req, res) => {
   try {
@@ -8,7 +9,7 @@ const update = async (req, res) => {
     const updatedUser = await userService.updateUserRoleOrStatus(userId, updateData);
     successResponseBody.message = "User updated successfully";
     successResponseBody.data = updatedUser;
-    res.status(200).json(successResponseBody);
+    res.status(STATUS.OK).json(successResponseBody);
   } catch (error) {
     if (error.err) {
       errorResponseBody.err = error.err;
@@ -17,7 +18,7 @@ const update = async (req, res) => {
     }
     errorResponseBody.err = error;
     errorResponseBody.message = "Internal server error";
-    res.status(500).json(errorResponseBody);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 

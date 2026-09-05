@@ -8,7 +8,7 @@ const createUser = async (data) => {
       if(data.userStatus && data.userStatus != USER_STATUS.approved) {
         throw {
           err: "We cannot set any other status for customer", 
-          code: 400
+          code: STATUS.BAD_REQUEST
         };
       }
     }
@@ -18,13 +18,13 @@ const createUser = async (data) => {
     const response = await User.create(data);
     return response;
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error(error);
     if (error.name === 'ValidationError') {
       let err = {};
       Object.keys(error.errors).forEach(key => {
         err[key] = error.errors[key].message;
       });
-      throw { err: err, code: 422 };
+      throw { err: err, code: STATUS.UNPROCESSABLE_ENTITY, message: "Validation error while creating user" };
     }
     throw error;
   }
@@ -36,7 +36,7 @@ const getUserByEmail = async (email) => {
     if (!response) {
       throw {
         err: "No user found with the given email",
-        code: 404
+        code: STATUS.NOT_FOUND
       };
     }
     return response;
@@ -52,7 +52,7 @@ const getUserById = async (id) => {
     if (!response) {
       throw {
         err: "No user found with the given id",
-        code: 404
+        code: STATUS.NOT_FOUND
       };
     }
     return response;
@@ -80,7 +80,7 @@ const updateUserRoleOrStatus = async (id, data) => {
     if (!response) {
       throw {
         err: "No user found with the given id",
-        code: 404
+        code: STATUS.NOT_FOUND
       };
     }
     return response;
@@ -91,7 +91,7 @@ const updateUserRoleOrStatus = async (id, data) => {
       Object.keys(error.errors).forEach(key => {
         err[key] = error.errors[key].message;
       });
-      throw { err: err, code: 422, message: "Validation error while updating user" };
+      throw { err: err, code: STATUS.UNPROCESSABLE_ENTITY, message: "Validation error while updating user" };
     }
     throw error;
   }
