@@ -97,8 +97,29 @@ const isAuthenticated = (req, res, next) => {
   }
 }
 
+const validateResetPasswordRequest = (req, res, next) => {
+  const { newPassword, oldPassword } = req.body; 
+
+  // Validate new password of the user.
+  if (!newPassword) {
+    errorResponseBody.err = 'New password is not provided in request body';
+    errorResponseBody.message = 'Something went wrong, can not process the request'
+    return res.status(400).json(errorResponseBody);
+  }
+
+  // Validate old password of the user.
+  if (!oldPassword) {
+    errorResponseBody.err = 'Old password is not provided in request body';
+    errorResponseBody.message = 'Something went wrong, can not process the request'
+    return res.status(400).json(errorResponseBody);
+  }
+
+  next();
+}
+
 module.exports = {
   validateSignupRequest,
   validateSigninRequest,
-  isAuthenticated
+  isAuthenticated,
+  validateResetPasswordRequest
 };
