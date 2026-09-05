@@ -16,7 +16,7 @@ const createMovie = async (data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return {
+      throw {
         err: err,
         code: STATUS.UNPROCESSABLE_ENTITY
       }
@@ -34,7 +34,7 @@ const createMovie = async (data) => {
 const getMovieById =  async (id) => {
   const movie = await Movie.findById(id);
   if (!movie) {
-    return {
+    throw {
       err: "No Movie Found for the provided movieId.",
       code: STATUS.NOT_FOUND,
     }
@@ -50,7 +50,7 @@ const getMovieById =  async (id) => {
 const deleteMovieById = async (id) => {
   const movie = await Movie.deleteOne(id);
   if (movie.deletedCount === 0) {
-    return {
+    throw {
       err: "No Movie Found for the provided movieId.",
       code: STATUS.NOT_FOUND,
     }
@@ -72,7 +72,7 @@ const updateMovieById = async (id, data) => {
     });
 
     if (!movie) {
-      return {
+      throw {
         err: "No Movie Found for the provided movieId.",
         code: STATUS.NOT_FOUND,
       };
@@ -85,7 +85,7 @@ const updateMovieById = async (id, data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return { err, code: STATUS.UNPROCESSABLE_ENTITY };
+      throw { err, code: STATUS.UNPROCESSABLE_ENTITY };
     }
     throw error;
   }
@@ -103,7 +103,7 @@ const fetchMovies = async (filter) => {
   }
   let movies = await Movie.find(query);
   if (!movies) {
-    return {
+    throw {
       err: "Not able to find the queries movies",
       code: STATUS.NOT_FOUND
     }

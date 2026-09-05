@@ -35,7 +35,7 @@ const createTheatre = async (data) => {
 const deleteTheatre = async (id) => {
   const theatre = await Theatre.deleteOne(id);
   if (theatre.deletedCount === 0) {
-    return {
+    throw {
       err: "No Movie Found for the provided theatreId.",
       code: STATUS.NOT_FOUND,
     }
@@ -51,7 +51,7 @@ const deleteTheatre = async (id) => {
 const getTheatre = async (id) => {
   const theatre = await Theatre.findById(id);
   if (!theatre) {
-    return {
+    throw {
       err: "No Theatre Found for the provided theatreId.",
       code: STATUS.NOT_FOUND,
     }
@@ -72,7 +72,7 @@ const updateTheatre = async (id, data) => {
       runValidators: true
     });
     if (!updatedTheatreResp) {
-      return {
+      throw {
         err: "No Theatre Found for the provided TheatreId",
         code: STATUS.NOT_FOUND
       }
@@ -200,7 +200,7 @@ const getMoviesInATheatre = async (theatreId) => {
   try {
     const theatre = await Theatre.findById(theatreId, {name: 1, movies: 1, address: 1}).populate('movies');
     if (!theatre) {
-      return {
+      throw {
         err: "No Theatre Found for the provided TheatreId",
         code: STATUS.NOT_FOUND
       }
@@ -218,7 +218,7 @@ const checkMovieInTheatre = async (theatreId, movieId) => {
       match: { _id: movieId }
     });
     if (!theatre || !theatre.movies.length) {
-      return {
+      throw {
         err: "No Theatre or Movie found with provided IDs.",
         code: STATUS.NOT_FOUND
       };
