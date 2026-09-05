@@ -143,30 +143,6 @@ const getAllTheTheatres = async (filter) => {
  * @returns -> returns the updated theatre object.
  */
 const updateMovieInTheatre = async (theatreId, movieId, insert) => {
-  // try {
-  //   const theatre = await Theatre.findById(theatreId);
-  //   if (!theatre) {
-  //     return {
-  //       err: "No Theatre Found for the provided TheatreId",
-  //       code: 404
-  //     }
-  //   }
-  //   if (insert) {
-  //     // Add the movieId to the theatre's movies array if it doesn't already exist
-  //     movieId.forEach(id => {
-  //       if (!theatre.movies.includes(id)) {
-  //         theatre.movies.push(id);
-  //       }
-  //     });
-  //   } else {
-  //     // Remove the movieId from the theatre's movies array
-  //     theatre.movies = theatre.movies.filter(id => !movieId.includes(id.toString()));
-  //   }
-  //   const updatedTheatre = await theatre.save();
-  //   return updatedTheatre.populate('movies'); // Populate the movies field with movie details
-  // } catch (error) {
-  //   throw error;
-  // }
   let theatre;
   try {
     if (insert) {
@@ -187,9 +163,9 @@ const updateMovieInTheatre = async (theatreId, movieId, insert) => {
     return theatre.populate('movies');
   } catch (error) {
     if(error.name === 'TypeError') {
-      return {
+      throw {
         err: "Invalid Theatre ID",
-        code: 404
+        code: STATUS.BAD_REQUEST
       };
     }
     throw error;

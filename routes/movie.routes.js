@@ -1,5 +1,6 @@
 const movieController = require('../controllers/movie.controller');
 const movieMiddleware = require('../middlewares/movie.middlewares');
+const authMiddleware = require('../middlewares/auth.middlewares');
 
 /**
  * 
@@ -13,13 +14,20 @@ const routes = (app) => {
   app.post(
     '/mba/api/v1/movies',
     movieMiddleware.validateMovieCreateRequest,
+    authMiddleware.isAuthenticated,
+    authMiddleware.isAdminOrClient,
     movieController.createMovie
   );
 
   /**
    * Route to delete a movie by ID.
    */
-  app.delete('/mba/api/v1/movies/:id', movieController.deleteMovie);
+  app.delete(
+    '/mba/api/v1/movies/:id',
+    authMiddleware.isAuthenticated,
+    authMiddleware.isAdminOrClient,
+    movieController.deleteMovie
+  );
 
   /**
    * Route to fetch a movie by ID.
@@ -29,12 +37,22 @@ const routes = (app) => {
   /**
    * Route to update a movie by ID.
    */
-  app.put('/mba/api/v1/movies/:id', movieController.updateMovie);
+  app.put(
+    '/mba/api/v1/movies/:id',
+    authMiddleware.isAuthenticated,
+    authMiddleware.isAdminOrClient,
+    movieController.updateMovie
+  );
 
   /**
    * Route to partially update a movie by ID.
    */
-  app.patch('/mba/api/v1/movies/:id', movieController.updateMovie);
+  app.patch(
+    '/mba/api/v1/movies/:id',
+    authMiddleware.isAuthenticated,
+    authMiddleware.isAdminOrClient,
+    movieController.updateMovie
+  );
 
   /**
    * Route to fetch all movies.
