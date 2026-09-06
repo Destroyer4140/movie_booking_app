@@ -7,6 +7,7 @@ const MovieRoutes = require("./routes/movie.routes");
 const TheatreRoutes = require('./routes/theatre.routes');
 const AuthRoutes = require('./routes/auth.routes');
 const UserRoutes = require('./routes/user.routes');
+const BookingRoutes = require('./routes/booking.route');
 
 // Configuring body parser
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -24,6 +25,8 @@ AuthRoutes(app);
 MovieRoutes(app); //invoking the movie routes.
 TheatreRoutes(app);
 UserRoutes(app);
+BookingRoutes(app);
+
 
 app.listen(PORT,async () => {
   // this executed once server started successfully.

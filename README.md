@@ -150,4 +150,10 @@
  - updatedAt
  - totalCost
  - numberOfSeats
- 
+
+### APIS for bookings
+- getAllBookings
+- getBokingOnId
+- createBooking
+- updateBooking
+

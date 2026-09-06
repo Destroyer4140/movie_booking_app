@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {BOOKING_STATUS} = require('../utils/constants');}
+const {BOOKING_STATUS} = require('../utils/constants');
 
 const bookingSchema = new mongoose.Schema({
   theatreId: {
@@ -17,7 +17,7 @@ const bookingSchema = new mongoose.Schema({
     ref: 'Movie',
     required: true,
   },
-  timing: {
+  timings: {
     type: String,
     required: true,
   },
