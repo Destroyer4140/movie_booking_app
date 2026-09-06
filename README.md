@@ -134,4 +134,20 @@
 - It always comes before authorization.
 - We are already familiar with process of authetication, bcs most of use perform it everyday.
 - Once authenticatied there are many decission that happen simultaneously in the background bcs of secret power of admin.
-- 
+
+
+## Booking
+  - In order to setup bookings, we need to first understand the usecase. 
+  - For a booking we need to assocaite users with theatre and movies.
+  - We can maintain status of the booking as well.
+
+### schema
+ - theatreId
+ - movieId
+ - timings
+ - status
+ - createdAt
+ - updatedAt
+ - totalCost
+ - numberOfSeats
+ 
