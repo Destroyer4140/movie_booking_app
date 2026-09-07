@@ -9,6 +9,7 @@ const AuthRoutes = require('./routes/auth.routes');
 const UserRoutes = require('./routes/user.routes');
 const BookingRoutes = require('./routes/booking.route');
 const ShowRoutes = require('./routes/show.routes');
+const PaymentRoutes = require('./routes/payment.routes');
 
 // Configuring body parser
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -28,6 +29,7 @@ TheatreRoutes(app);
 UserRoutes(app);
 BookingRoutes(app);
 ShowRoutes(app);
+PaymentRoutes(app);
 
 
 app.listen(PORT,async () => {
